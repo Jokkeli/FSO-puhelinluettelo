@@ -36,7 +36,6 @@ app.get('/', (req, res) => {
   })
   
   app.get('/persons', (req, res) => {
-    console.log("jee1")
     res.json(persons)
   })
 
@@ -65,6 +64,7 @@ app.delete('/persons/:id', (request, response) => {
 
 app.post('/persons', (request, response) => {
   const body = request.body
+  console.log(body)
   if (body.name === undefined || body.number === undefined) {
     return response.status(400).json({error: 'name or number missing'})
   } 
