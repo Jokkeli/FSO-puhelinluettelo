@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Tervetuloa puhelinluettelon takapäähän.</h1>')
   })
   
-  app.get('/persons', (req, res) => {
+  app.get('/api/persons', (req, res) => {
     Person
       .find({}, {__v: 0})
       .then(persons => {
@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
       })
   })
 
-  app.get('/info', (req, res) => {
+  app.get('/api/info', (req, res) => {
     const tietoja = persons.length;
     const date = new Date();
     res.send('puhelinluettelossa on ' + tietoja + ' henkilön tiedot <br><br>' + date)
@@ -69,14 +69,14 @@ app.get('/', (req, res) => {
       }
     })
 
-app.delete('/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
 })
 
-app.post('/persons', (request, response) => {
+app.post('/api/persons', (request, response) => {
   const body = request.body
   console.log(body)
   if (body.name === undefined || body.number === undefined) {
