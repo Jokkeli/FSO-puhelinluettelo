@@ -3,7 +3,17 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
-const Person = require('./models/person')
+const mongoose = require('mongoose')
+
+// korvaa url oman tietokantasi urlilla. ethän laita salasanaa Githubiin!
+const url = 'mongodb://jokkeli:perse1@ds121371.mlab.com:21371/fsopuhelinluettelo'
+
+mongoose.connect(url)
+
+const Person = mongoose.model('Person', {
+  name: String,
+  number: String
+})
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -45,13 +55,14 @@ app.get('/', (req, res) => {
     res.send('<h1>Tervetuloa puhelinluettelon takapäähän.</h1>')
   })
   
-  app.get('/api/persons', (req, res) => {
-    Person
-      .find({}, {__v: 0})
+  app.get('/api/persons', (request, response) => {
+    Note
+      .find({})
       .then(persons => {
-        response.json(persons.map(formatPerson))
+        response.json(persons)
       })
   })
+  
 
   app.get('/api/info', (req, res) => {
     const tietoja = persons.length;
@@ -59,7 +70,7 @@ app.get('/', (req, res) => {
     res.send('puhelinluettelossa on ' + tietoja + ' henkilön tiedot <br><br>' + date)
   })
 
-  app.get('/persons/:id', (request, response) => {
+  app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id )
     if ( person ) {
