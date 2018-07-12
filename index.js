@@ -65,8 +65,7 @@ app.delete('/persons/:id', (request, response) => {
 
 app.post('/persons', (request, response) => {
   const body = request.body
-  console.log(body)
-  if (body.name === undefined || body.number === undefined) {
+  if (body.name === ""|| body.number === "") {
     return response.status(400).json({error: 'name or number missing'})
   } 
 
