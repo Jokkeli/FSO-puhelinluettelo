@@ -3,30 +3,11 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
-
-// korvaa url oman tietokantasi urlilla. ethän laita salasanaa Githubiin!
-const url = 'mongodb://jokkeli:perse1@ds121371.mlab.com:21371/fsopuhelinluettelo'
-
-mongoose.connect(url)
-
-const Person = mongoose.model('Person', {
-  name: String,
-  number: String
-})
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan('tiny'))
 app.use(express.static('build'))
-
-const formatPerson = (person) => {
-  return {
-    name: person.name,
-    number: person.number,
-    id: person._id
-  }
-}
 
 let persons = [
           {
@@ -55,22 +36,17 @@ app.get('/', (req, res) => {
     res.send('<h1>Tervetuloa puhelinluettelon takapäähän.</h1>')
   })
   
-  app.get('/api/persons', (request, response) => {
-    Note
-      .find({})
-      .then(persons => {
-        response.json(persons)
-      })
+  app.get('/persons', (request, response) => {
+      response.send(persons)
   })
-  
 
-  app.get('/api/info', (req, res) => {
+  app.get('/info', (req, res) => {
     const tietoja = persons.length;
     const date = new Date();
     res.send('puhelinluettelossa on ' + tietoja + ' henkilön tiedot <br><br>' + date)
   })
 
-  app.get('/api/persons/:id', (request, response) => {
+  app.get('/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id )
     if ( person ) {
@@ -80,14 +56,14 @@ app.get('/', (req, res) => {
       }
     })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/persons', (request, response) => {
   const body = request.body
   console.log(body)
   if (body.name === undefined || body.number === undefined) {
