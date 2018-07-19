@@ -1,12 +1,17 @@
 const mongoose = require('mongoose')
 
-const url = 'mongodb://jokkeli:perse1@ds121371.mlab.com:21371/fsopuhelinluettelo'
+if ( process.env.NODE_ENV !== 'production' ) {
+  require('dotenv').config()
+}
+
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
+mongoose.Promise = global.Promise
 
 const Person = mongoose.model('Person', {
   name: String,
-  number: Date
+  number: String
 })
 
 module.exports = Person
