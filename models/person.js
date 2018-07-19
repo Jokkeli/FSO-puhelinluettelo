@@ -4,7 +4,7 @@ if ( process.env.NODE_ENV !== 'production' ) {
   require('dotenv').config()
 }
 
-const url = process.env.MONGODB_URI
+const url = process.env.MONGODB_URL
 
 mongoose.connect(url)
 mongoose.Promise = global.Promise
