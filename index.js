@@ -34,19 +34,21 @@ let persons = [
           }
 ]
 
-const formatPerson = (person) => {
-  return {
-    "name" : person.name,
-    "number" : person.number,
-    "id": person._id
+  const formatPerson = (person) => {
+    return {
+      "name" : person.name,
+      "number" : person.number,
+      "id": person._id
+    }
   }
-}
-app.get('/api/', (req, res) => {
+
+  app.get('/api/', (req, res) => {
+    console.log("/api pyyntö")
     res.send('<h1>Tervetuloa puhelinluettelon takapäähän.</h1>')
   })
   
   app.get('/api/persons', (request, response) => {
-    console.log("moi")
+    console.log("api/persons pyyntö")
     Person
     .find({})
     .then(persons => {
@@ -65,6 +67,7 @@ app.get('/api/', (req, res) => {
   })
 
   app.get('/api/persons/:id', (request, response) => {
+    console.log("api/persons/:id pyyntö")
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id )
     if ( person ) {
@@ -102,7 +105,13 @@ app.post('/api/persons', (request, response) => {
       response.json(formatPerson(savedPerson))
     })
 })
-  
+
+ const error = (request, response) => {
+   response.status(404).send({error: 'unknown endpoint'})
+ }
+
+ app.use(error)
+ 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
