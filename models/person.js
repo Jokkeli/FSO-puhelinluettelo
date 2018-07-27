@@ -4,7 +4,7 @@ if ( process.env.NODE_ENV !== 'production' ) {
   require('dotenv').config()
 }
 
-const url = 'mongodb://jokkeli:perse1@ds121371.mlab.com:21371/fsopuhelinluettelo'
+const url = process.env.MONGODB_URL
 
 mongoose.connect(url)
 mongoose.Promise = global.Promise
