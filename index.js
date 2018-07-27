@@ -43,12 +43,12 @@ let persons = [
   }
 
   app.get('/api/', (req, res) => {
-    console.log("/api pyyntö")
+    console.log({ response })
     res.send('<h1>Tervetuloa puhelinluettelon takapäähän.</h1>')
   })
   
   app.get('/api/persons', (request, response) => {
-    console.log("api/persons pyyntö")
+    console.log({ response })
     Person
     .find({})
     .then(persons => {
@@ -61,13 +61,14 @@ let persons = [
   })
 
   app.get('/api/info', (req, res) => {
+    console.log({ response })
     const tietoja = persons.length;
     const date = new Date();
     res.send('puhelinluettelossa on ' + tietoja + ' henkilön tiedot <br><br>' + date)
   })
 
   app.get('/api/persons/:id', (request, response) => {
-    console.log("api/persons/:id pyyntö")
+    console.log({ response })
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id )
     if ( person ) {
@@ -78,6 +79,7 @@ let persons = [
     })
 
 app.delete('/api/persons/:id', (request, response) => {
+  console.log({ response })
   Person
   .findByIdAndRemove(request.params.id)
   .then(result => {
@@ -111,7 +113,7 @@ app.post('/api/persons', (request, response) => {
  }
 
  app.use(error)
- 
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
